@@ -1,1 +1,304 @@
-{"openapi":"3.1.0","info":{"title":"Educator Copilot using LangGraph + Reflexion","description":"Educational Quiz Generation using LangGraph + Reflexion. Support multiple LLMs.","version":"2.0.1"},"paths":{"/agent/educator-copilot/docs":{"get":{"tags":["Docs"],"summary":"Custom Swagger Ui Html","description":"Must included this to fix the openapi error of FastAPI","operationId":"custom_swagger_ui_html_agent_educator_copilot_docs_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/agent/educator-copilot/health":{"get":{"tags":["Health Check"],"summary":"Health Check","description":"Performs a health check and returns a JSON response indicating the service is healthy.","operationId":"health_check_agent_educator_copilot_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HealthCheckResponseModel"}}}}}}},"/agent/educator-copilot/run":{"post":{"tags":["Workflow Execution"],"summary":"Run Educator Copilot","description":"Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict, optional): Partner ID and tags.\n        - partner_id (str, optional): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict, optional): Request parameters.\n        - message (str, optional): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.","operationId":"run_educator_copilot_agent_educator_copilot_run_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/InputData"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkflowResponseModel"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}}},"components":{"schemas":{"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"HealthCheckResponseModel":{"properties":{"status":{"type":"string","title":"Status","description":"The status code of the response. Can be 'success', 'fail' or 'error'.","examples":["success","fail","error"]},"data":{"type":"object","title":"Data","description":"The health status of the service. Can be 'good' or 'bad'.","examples":[{"health":"good"}]}},"type":"object","required":["status","data"],"title":"HealthCheckResponseModel","description":"Data model for health check response"},"InputData":{"properties":{"metadata":{"type":"object","title":"Metadata","description":"Partner ID and Tags.","examples":[{"partner_id":"de589397-44fa-41a7-af6c-da6f31b01670","tags":["mlops","data"]}]},"params":{"type":"object","title":"Request Parameters send to Agentic Workflow","description":"Request parameters","examples":[{"message":"5 questions about MLOPs"}]},"filters":{"type":"object","title":"Filters","description":"The filters to be applied to the retrieval module of workflow.","examples":[{}]}},"type":"object","required":["metadata","params","filters"],"title":"InputData","description":"Data model for API POST request"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"},"WorkflowResponseModel":{"properties":{"status":{"type":"string","title":"Status","description":"The status code of the response. Can be 'success', 'fail' or 'error'.","examples":["success","fail","error"]},"data":{"type":"object","title":"Data","description":"The response from the chat model.","examples":[{"quiz":{"question":[{"answer":"MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.","question":"Describe in a few sentences what MLOps aims to achieve.","question_type":"Paragraph"},{"answer":"False","option":["True","False"],"question":"MLOps primarily focuses on the hardware aspect of machine learning models.","question_type":"MCQ"},{"answer":"MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.","question":"Describe in a few sentences what MLOps aims to achieve.","question_type":"Paragraph"},{"answer":"To increase hardware costs for machine learning models","option":["To automate the deployment of ML models","To monitor ML model performance","To ensure reproducibility of ML models","To increase hardware costs for machine learning models"],"question":"Which of the following is NOT a primary objective of MLOps?","question_type":"MCQ"},{"answer":"True","option":["True","False"],"question":"MLOps stands for Machine Learning Operations.","question_type":"MCQ"}],"question_count":5,"topic":"MLOps"}}]}},"type":"object","required":["status","data"],"title":"WorkflowResponseModel","description":"Data model for chat model response"}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Educator Copilot using LangGraph + Reflexion",
+      "description": "Educational Quiz Generation using LangGraph + Reflexion. Support multiple LLMs.",
+      "version": "2.0.1"
+    },
+    "servers": [
+      {
+        "url": "http://0.0.0.0:8080",
+        "description": "Production server"
+      },
+      {
+        "url": "https://aiverse.rockitflow.com",
+        "description": "Production server"
+      }
+    ],
+    "paths": {
+      "/agent/educator-copilot/docs": {
+        "get": {
+          "tags": [
+            "Docs"
+          ],
+          "summary": "Custom Swagger Ui Html",
+          "description": "Must included this to fix the openapi error of FastAPI",
+          "operationId": "custom_swagger_ui_html_agent_educator_copilot_docs_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "/agent/educator-copilot/health": {
+        "get": {
+          "tags": [
+            "Health Check"
+          ],
+          "summary": "Health Check",
+          "description": "Performs a health check and returns a JSON response indicating the service is healthy.",
+          "operationId": "health_check_agent_educator_copilot_health_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HealthCheckResponseModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/agent/educator-copilot/run": {
+        "post": {
+          "tags": [
+            "Workflow Execution"
+          ],
+          "summary": "Run Educator Copilot",
+          "description": "Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict, optional): Partner ID and tags.\n        - partner_id (str, optional): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict, optional): Request parameters.\n        - message (str, optional): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.",
+          "operationId": "run_educator_copilot_agent_educator_copilot_run_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InputData"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WorkflowResponseModel"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "HealthCheckResponseModel": {
+          "properties": {
+            "status": {
+              "type": "string",
+              "title": "Status",
+              "description": "The status code of the response. Can be 'success', 'fail' or 'error'.",
+              "examples": [
+                "success",
+                "fail",
+                "error"
+              ]
+            },
+            "data": {
+              "type": "object",
+              "title": "Data",
+              "description": "The health status of the service. Can be 'good' or 'bad'.",
+              "examples": [
+                {
+                  "health": "good"
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "status",
+            "data"
+          ],
+          "title": "HealthCheckResponseModel",
+          "description": "Data model for health check response"
+        },
+        "InputData": {
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "title": "Metadata",
+              "description": "Partner ID and Tags.",
+              "examples": [
+                {
+                  "partner_id": "de589397-44fa-41a7-af6c-da6f31b01670",
+                  "tags": [
+                    "mlops",
+                    "data"
+                  ]
+                }
+              ]
+            },
+            "params": {
+              "type": "object",
+              "title": "Request Parameters send to Agentic Workflow",
+              "description": "Request parameters",
+              "examples": [
+                {
+                  "message": "5 questions about MLOPs"
+                }
+              ]
+            },
+            "filters": {
+              "type": "object",
+              "title": "Filters",
+              "description": "The filters to be applied to the retrieval module of workflow.",
+              "examples": [
+                {}
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "metadata",
+            "params",
+            "filters"
+          ],
+          "title": "InputData",
+          "description": "Data model for API POST request"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        },
+        "WorkflowResponseModel": {
+          "properties": {
+            "status": {
+              "type": "string",
+              "title": "Status",
+              "description": "The status code of the response. Can be 'success', 'fail' or 'error'.",
+              "examples": [
+                "success",
+                "fail",
+                "error"
+              ]
+            },
+            "data": {
+              "type": "object",
+              "title": "Data",
+              "description": "The response from the chat model.",
+              "examples": [
+                {
+                  "quiz": {
+                    "question": [
+                      {
+                        "answer": "MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.",
+                        "question": "Describe in a few sentences what MLOps aims to achieve.",
+                        "question_type": "Paragraph"
+                      },
+                      {
+                        "answer": "False",
+                        "option": [
+                          "True",
+                          "False"
+                        ],
+                        "question": "MLOps primarily focuses on the hardware aspect of machine learning models.",
+                        "question_type": "MCQ"
+                      },
+                      {
+                        "answer": "MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.",
+                        "question": "Describe in a few sentences what MLOps aims to achieve.",
+                        "question_type": "Paragraph"
+                      },
+                      {
+                        "answer": "To increase hardware costs for machine learning models",
+                        "option": [
+                          "To automate the deployment of ML models",
+                          "To monitor ML model performance",
+                          "To ensure reproducibility of ML models",
+                          "To increase hardware costs for machine learning models"
+                        ],
+                        "question": "Which of the following is NOT a primary objective of MLOps?",
+                        "question_type": "MCQ"
+                      },
+                      {
+                        "answer": "True",
+                        "option": [
+                          "True",
+                          "False"
+                        ],
+                        "question": "MLOps stands for Machine Learning Operations.",
+                        "question_type": "MCQ"
+                      }
+                    ],
+                    "question_count": 5,
+                    "topic": "MLOps"
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "status",
+            "data"
+          ],
+          "title": "WorkflowResponseModel",
+          "description": "Data model for chat model response"
+        }
+      }
+    }
+  }
