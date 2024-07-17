@@ -1,1 +1,643 @@
-{"openapi":"3.1.0","info":{"title":"Educator Copilot using LangGraph + Reflexion","description":"Educational Quiz Generation using LangGraph + Reflexion. Support multiple LLMs.","version":"2.0.2"},"servers":[{"url":"http://localhost:8080","description":"Develop"},{"url":"https://aiverse.rockitflow.com","description":"Production"}],"paths":{"/agent/educator-copilot/docs":{"get":{"tags":["Docs"],"summary":"Custom Swagger Ui Html","description":"Must included this to fix the openapi error of FastAPI","operationId":"custom_swagger_ui_html_agent_educator_copilot_docs_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/agent/educator-copilot/health":{"get":{"tags":["Health Check"],"summary":"Health Check","description":"Performs a health check and returns a JSON response indicating the service is healthy.","operationId":"health_check_agent_educator_copilot_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HealthCheckResponseModel"}}}}}}},"/agent/educator-copilot/run":{"post":{"tags":["Workflow Execution"],"summary":"Run Educator Copilot","description":"Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict): Partner ID and tags.\n        - partner_id (str): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict): Request parameters.\n        - message (str): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.","operationId":"run_educator_copilot_agent_educator_copilot_run_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/InputData"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkflowResponseModel"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/agent/educator-copilot/v1/text":{"post":{"tags":["Workflow Execution","Text"],"summary":"Run Educator Copilot Text","description":"Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict): Partner ID and tags.\n        - partner_id (str): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict): Request parameters.\n        - message (str): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.","operationId":"run_educator_copilot_text_agent_educator_copilot_v1_text_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TextInputData"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkflowResponseModel"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/agent/educator-copilot/v1/topic":{"post":{"tags":["Workflow Execution","Topic"],"summary":"Run Educator Copilot Topic","description":"Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict): Partner ID and tags.\n        - partner_id (str): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict): Request parameters.\n        - message (str): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.","operationId":"run_educator_copilot_topic_agent_educator_copilot_v1_topic_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TopicInputData"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkflowResponseModel"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}}},"components":{"schemas":{"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"HealthCheckResponseModel":{"properties":{"status":{"type":"string","title":"Status code","description":"The status code of the response. Can be 'success', 'fail' or 'error'.","examples":["success","fail","error"]},"data":{"type":"object","title":"Health status","description":"The health status of the service. Can be 'good' or 'bad'.","examples":[{"health":"good"}]}},"type":"object","required":["status","data"],"title":"HealthCheckResponseModel","description":"Data model for health check response"},"InputData":{"properties":{"metadata":{"allOf":[{"$ref":"#/components/schemas/Metadata"}],"description":"Partner ID and Tags.","examples":[{"partner_id":"de589397-44fa-41a7-af6c-da6f31b01670","tags":["mlops","data"]}]},"params":{"type":"object","title":"Request Parameters send to Agentic Workflow","description":"Request parameters","examples":[{"message":"5 questions about MLOPs"}]},"filters":{"type":"object","title":"Filters","description":"The filters to be applied to the retrieval module of workflow.","examples":[{}]}},"type":"object","required":["metadata","params","filters"],"title":"InputData","description":"Data model for API POST request"},"Metadata":{"properties":{"partner_id":{"type":"string","title":"Partner ID","description":"Partner ID of the index","examples":["de589397-44fa-41a7-af6c-da6f31b01670"]},"tags":{"items":{"type":"string"},"type":"array","title":"Tags","description":"List of tags associated with the request.","examples":[["mlops","data"]]}},"type":"object","required":["partner_id","tags"],"title":"Metadata"},"TextInputData":{"properties":{"metadata":{"allOf":[{"$ref":"#/components/schemas/Metadata"}],"description":"Partner ID and Tags.","examples":[{"partner_id":"de589397-44fa-41a7-af6c-da6f31b01670","tags":["mlops","data"]}]},"params":{"allOf":[{"$ref":"#/components/schemas/TextParams"}],"title":"Request Parameters send to Agentic Workflow","description":"Request parameters","examples":[{"text":"The North Star Framework aims to unify teams around a shared vision and strategy by identifying a single, crucial metric (The North Star Metric) and its contributing factors (inputs)"}]},"filters":{"type":"object","title":"Filters","description":"The filters to be applied to the retrieval module of workflow.","examples":[{}]}},"type":"object","required":["metadata","params","filters"],"title":"TextInputData","description":"Data model for API POST request for text"},"TextParams":{"properties":{"text":{"type":"string","title":"Text","description":"The message to be processed by the educator copilot.","examples":["The North Star Framework aims to unify teams around a shared vision and strategy by identifying a single, crucial metric (The North Star Metric) and its contributing factors (inputs)"]}},"type":"object","required":["text"],"title":"TextParams","description":"Data model for API POST request for text"},"TopicInputData":{"properties":{"metadata":{"allOf":[{"$ref":"#/components/schemas/Metadata"}],"description":"Partner ID and Tags.","examples":[{"partner_id":"de589397-44fa-41a7-af6c-da6f31b01670","tags":["mlops","data"]}]},"params":{"allOf":[{"$ref":"#/components/schemas/TopicParams"}],"title":"Request Parameters send to Agentic Workflow","description":"Request parameters","examples":[{"difficulty":"easy","language":"en","question_count":5,"question_type":"MCQ","topic":"World War II"}]},"filters":{"type":"object","title":"Filters","description":"The filters to be applied to the retrieval module of workflow.","examples":[{}]}},"type":"object","required":["metadata","params","filters"],"title":"TopicInputData","description":"Data model for API POST request for topic"},"TopicParams":{"properties":{"topic":{"type":"string","title":"Topic","description":"The topic to generate questions about. Default is 'Data Visualization'."},"difficulty":{"type":"string","title":"Difficulty","description":"The difficulty level of the questions. Default is 'easy'."},"question_count":{"type":"integer","title":"Question Count","description":"The total number of questions to generate. Default is 5."},"language":{"type":"string","title":"Language","description":"The language of the questions. Default is 'en'."},"question_type":{"type":"string","title":"Question Type","description":"The type of questions to generate. Default is 'MCQ' or 'Paragraph'."}},"type":"object","required":["topic","difficulty","question_count","language","question_type"],"title":"TopicParams","description":"Data model for API POST request for topic"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"},"WorkflowResponseModel":{"properties":{"status":{"type":"string","title":"Status code","description":"The status code of the response. Can be 'success', 'fail' or 'error'.","examples":["success","fail","error"]},"data":{"type":"object","title":"Agentic workflow response","description":"The response from the agentic workflow.","examples":[{"quiz":{"question":[{"answer":"MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.","question":"Describe in a few sentences what MLOps aims to achieve.","question_type":"Paragraph"},{"answer":"False","option":["True","False"],"question":"MLOps primarily focuses on the hardware aspect of machine learning models.","question_type":"MCQ"},{"answer":"MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.","question":"Describe in a few sentences what MLOps aims to achieve.","question_type":"Paragraph"},{"answer":"To increase hardware costs for machine learning models","option":["To automate the deployment of ML models","To monitor ML model performance","To ensure reproducibility of ML models","To increase hardware costs for machine learning models"],"question":"Which of the following is NOT a primary objective of MLOps?","question_type":"MCQ"},{"answer":"True","option":["True","False"],"question":"MLOps stands for Machine Learning Operations.","question_type":"MCQ"}],"question_count":5,"topic":"MLOps"}},{"quiz":{"question":[{"answer":"Contributing factors, also known as inputs, are the elements that contribute to the North Star Metric. They help teams focus on the key drivers that impact the North Star Metric, aligning everyone around a shared strategy to achieve it.","question":"Explain the role of contributing factors (inputs) in the North Star Framework.","question_type":"Paragraph"},{"answer":"Contributing factors, also known as inputs, are the elements that contribute to the North Star Metric. They help teams focus on the key drivers that impact the North Star Metric, aligning everyone around a shared strategy to achieve it.","question":"Explain the role of contributing factors (inputs) in the North Star Framework.","question_type":"Paragraph"},{"answer":"True","option":["True","False"],"question":"The North Star Framework aims to unify teams around a shared vision and strategy by identifying a single, crucial metric.","question_type":"MCQ"},{"answer":"False","option":["True","False"],"question":"The North Star Framework helps teams achieve a shared vision by focusing on multiple metrics.","question_type":"MCQ"},{"answer":"To measure the overall success of a product or service","option":["To measure the individual performance of team members","To measure the overall success of a product or service","To track the progress of specific tasks","To assess the efficiency of team communication"],"question":"What is the primary goal of the North Star Metric in the North Star Framework?","question_type":"MCQ"}],"question_count":5,"topic":"North Star Framework"}}]}},"type":"object","required":["status","data"],"title":"WorkflowResponseModel","description":"Data model for chat model response"}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Educator Copilot using LangGraph + Reflexion",
+      "description": "Educational Quiz Generation using LangGraph + Reflexion. Support multiple LLMs.",
+      "version": "2.0.2"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080",
+        "description": "Develop"
+      },
+      {
+        "url": "https://aiverse.rockitflow.com",
+        "description": "Production"
+      }
+    ],
+    "paths": {
+      "/agent/educator-copilot/docs": {
+        "get": {
+          "tags": [
+            "Docs"
+          ],
+          "summary": "Custom Swagger Ui Html",
+          "description": "Must included this to fix the openapi error of FastAPI",
+          "operationId": "custom_swagger_ui_html_agent_educator_copilot_docs_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/agent/educator-copilot/health": {
+        "get": {
+          "tags": [
+            "Health Check"
+          ],
+          "summary": "Health Check",
+          "description": "Performs a health check and returns a JSON response indicating the service is healthy.",
+          "operationId": "health_check_agent_educator_copilot_health_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HealthCheckResponseModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/agent/educator-copilot/run": {
+        "post": {
+          "tags": [
+            "Workflow Execution"
+          ],
+          "summary": "Run Educator Copilot",
+          "description": "Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict): Partner ID and tags.\n        - partner_id (str): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict): Request parameters.\n        - message (str): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.",
+          "operationId": "run_educator_copilot_agent_educator_copilot_run_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InputData"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WorkflowResponseModel"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/agent/educator-copilot/v1/text": {
+        "post": {
+          "tags": [
+            "Workflow Execution",
+            "Text"
+          ],
+          "summary": "Run Educator Copilot Text",
+          "description": "Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict): Partner ID and tags.\n        - partner_id (str): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict): Request parameters.\n        - message (str): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.",
+          "operationId": "run_educator_copilot_text_agent_educator_copilot_v1_text_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextInputData"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WorkflowResponseModel"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/agent/educator-copilot/v1/topic": {
+        "post": {
+          "tags": [
+            "Workflow Execution",
+            "Topic"
+          ],
+          "summary": "Run Educator Copilot Topic",
+          "description": "Processes an educator copilot request with metadata and message parameters.\n\n**Parameters:**\n\n- data (InputData): A Pydantic model holding the request data.\n    - metadata (dict): Partner ID and tags.\n        - partner_id (str): Partner's unique identifier.\n        - tags (List[str], optional): List of tags associated with the request.\n    - params (dict): Request parameters.\n        - message (str): The message to be processed by the educator copilot.\n\n**Returns:**\n\nA JSON response containing the processed quiz data (implementation not provided).\n\n**Raises:**\n\n- ValueError: If required fields are missing in the request body.",
+          "operationId": "run_educator_copilot_topic_agent_educator_copilot_v1_topic_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopicInputData"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WorkflowResponseModel"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "HealthCheckResponseModel": {
+          "properties": {
+            "status": {
+              "type": "string",
+              "title": "Status code",
+              "description": "The status code of the response. Can be 'success', 'fail' or 'error'.",
+              "examples": [
+                "success",
+                "fail",
+                "error"
+              ]
+            },
+            "data": {
+              "type": "object",
+              "title": "Health status",
+              "description": "The health status of the service. Can be 'good' or 'bad'.",
+              "examples": [
+                {
+                  "health": "good"
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "status",
+            "data"
+          ],
+          "title": "HealthCheckResponseModel",
+          "description": "Data model for health check response"
+        },
+        "InputData": {
+          "properties": {
+            "metadata": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              ],
+              "description": "Partner ID and Tags.",
+              "examples": [
+                {
+                  "partner_id": "de589397-44fa-41a7-af6c-da6f31b01670",
+                  "tags": [
+                    "mlops",
+                    "data"
+                  ]
+                }
+              ]
+            },
+            "params": {
+              "type": "object",
+              "title": "Request Parameters send to Agentic Workflow",
+              "description": "Request parameters",
+              "examples": [
+                {
+                  "message": "5 questions about MLOPs"
+                }
+              ]
+            },
+            "filters": {
+              "type": "object",
+              "title": "Filters",
+              "description": "The filters to be applied to the retrieval module of workflow.",
+              "examples": [
+                {
+  
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "metadata",
+            "params",
+            "filters"
+          ],
+          "title": "InputData",
+          "description": "Data model for API POST request"
+        },
+        "Metadata": {
+          "properties": {
+            "partner_id": {
+              "type": "string",
+              "title": "Partner ID",
+              "description": "Partner ID of the index",
+              "examples": [
+                "de589397-44fa-41a7-af6c-da6f31b01670"
+              ]
+            },
+            "tags": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "title": "Tags",
+              "description": "List of tags associated with the request.",
+              "examples": [
+                [
+                  "mlops",
+                  "data"
+                ]
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "partner_id",
+            "tags"
+          ],
+          "title": "Metadata"
+        },
+        "TextInputData": {
+          "properties": {
+            "metadata": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              ],
+              "description": "Partner ID and Tags.",
+              "examples": [
+                {
+                  "partner_id": "de589397-44fa-41a7-af6c-da6f31b01670",
+                  "tags": [
+                    "mlops",
+                    "data"
+                  ]
+                }
+              ]
+            },
+            "params": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/TextParams"
+                }
+              ],
+              "title": "Request Parameters send to Agentic Workflow",
+              "description": "Request parameters",
+              "examples": [
+                {
+                  "text": "The North Star Framework aims to unify teams around a shared vision and strategy by identifying a single, crucial metric (The North Star Metric) and its contributing factors (inputs)"
+                }
+              ]
+            },
+            "filters": {
+              "type": "object",
+              "title": "Filters",
+              "description": "The filters to be applied to the retrieval module of workflow.",
+              "examples": [
+                {
+  
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "metadata",
+            "params",
+            "filters"
+          ],
+          "title": "TextInputData",
+          "description": "Data model for API POST request for text"
+        },
+        "TextParams": {
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "Text",
+              "description": "The message to be processed by the educator copilot.",
+              "examples": [
+                "The North Star Framework aims to unify teams around a shared vision and strategy by identifying a single, crucial metric (The North Star Metric) and its contributing factors (inputs)"
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "text"
+          ],
+          "title": "TextParams",
+          "description": "Data model for API POST request for text"
+        },
+        "TopicInputData": {
+          "properties": {
+            "metadata": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Metadata"
+                }
+              ],
+              "description": "Partner ID and Tags.",
+              "examples": [
+                {
+                  "partner_id": "de589397-44fa-41a7-af6c-da6f31b01670",
+                  "tags": [
+                    "mlops",
+                    "data"
+                  ]
+                }
+              ]
+            },
+            "params": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/TopicParams"
+                }
+              ],
+              "title": "Request Parameters send to Agentic Workflow",
+              "description": "Request parameters",
+              "examples": [
+                {
+                  "difficulty": "easy",
+                  "language": "en",
+                  "question_count": 5,
+                  "question_type": "MCQ",
+                  "topic": "World War II"
+                }
+              ]
+            },
+            "filters": {
+              "type": "object",
+              "title": "Filters",
+              "description": "The filters to be applied to the retrieval module of workflow.",
+              "examples": [
+                {
+  
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "metadata",
+            "params",
+            "filters"
+          ],
+          "title": "TopicInputData",
+          "description": "Data model for API POST request for topic"
+        },
+        "TopicParams": {
+          "properties": {
+            "topic": {
+              "type": "string",
+              "title": "Topic",
+              "description": "The topic to generate questions about. Default is 'Data Visualization'."
+            },
+            "difficulty": {
+              "type": "string",
+              "title": "Difficulty",
+              "description": "The difficulty level of the questions. Default is 'easy'."
+            },
+            "question_count": {
+              "type": "integer",
+              "title": "Question Count",
+              "description": "The total number of questions to generate. Default is 5."
+            },
+            "language": {
+              "type": "string",
+              "title": "Language",
+              "description": "The language of the questions. Default is 'en'."
+            },
+            "question_type": {
+              "type": "string",
+              "title": "Question Type",
+              "description": "The type of questions to generate. Default is 'MCQ' or 'Paragraph'."
+            }
+          },
+          "type": "object",
+          "required": [
+            "topic",
+            "difficulty",
+            "question_count",
+            "language",
+            "question_type"
+          ],
+          "title": "TopicParams",
+          "description": "Data model for API POST request for topic"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        },
+        "WorkflowResponseModel": {
+          "properties": {
+            "status": {
+              "type": "string",
+              "title": "Status code",
+              "description": "The status code of the response. Can be 'success', 'fail' or 'error'.",
+              "examples": [
+                "success",
+                "fail",
+                "error"
+              ]
+            },
+            "data": {
+              "type": "object",
+              "title": "Agentic workflow response",
+              "description": "The response from the agentic workflow.",
+              "examples": [
+                {
+                  "quiz": {
+                    "question": [
+                      {
+                        "answer": "MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.",
+                        "question": "Describe in a few sentences what MLOps aims to achieve.",
+                        "question_type": "Paragraph"
+                      },
+                      {
+                        "answer": "False",
+                        "option": [
+                          "True",
+                          "False"
+                        ],
+                        "question": "MLOps primarily focuses on the hardware aspect of machine learning models.",
+                        "question_type": "MCQ"
+                      },
+                      {
+                        "answer": "MLOps aims to streamline the process of developing, deploying, and maintaining machine learning models by integrating DevOps principles with machine learning. It focuses on automation, monitoring, and governance to ensure models are reproducible, scalable, and reliable.",
+                        "question": "Describe in a few sentences what MLOps aims to achieve.",
+                        "question_type": "Paragraph"
+                      },
+                      {
+                        "answer": "To increase hardware costs for machine learning models",
+                        "option": [
+                          "To automate the deployment of ML models",
+                          "To monitor ML model performance",
+                          "To ensure reproducibility of ML models",
+                          "To increase hardware costs for machine learning models"
+                        ],
+                        "question": "Which of the following is NOT a primary objective of MLOps?",
+                        "question_type": "MCQ"
+                      },
+                      {
+                        "answer": "True",
+                        "option": [
+                          "True",
+                          "False"
+                        ],
+                        "question": "MLOps stands for Machine Learning Operations.",
+                        "question_type": "MCQ"
+                      }
+                    ],
+                    "question_count": 5,
+                    "topic": "MLOps"
+                  }
+                },
+                {
+                  "quiz": {
+                    "question": [
+                      {
+                        "answer": "Contributing factors, also known as inputs, are the elements that contribute to the North Star Metric. They help teams focus on the key drivers that impact the North Star Metric, aligning everyone around a shared strategy to achieve it.",
+                        "question": "Explain the role of contributing factors (inputs) in the North Star Framework.",
+                        "question_type": "Paragraph"
+                      },
+                      {
+                        "answer": "Contributing factors, also known as inputs, are the elements that contribute to the North Star Metric. They help teams focus on the key drivers that impact the North Star Metric, aligning everyone around a shared strategy to achieve it.",
+                        "question": "Explain the role of contributing factors (inputs) in the North Star Framework.",
+                        "question_type": "Paragraph"
+                      },
+                      {
+                        "answer": "True",
+                        "option": [
+                          "True",
+                          "False"
+                        ],
+                        "question": "The North Star Framework aims to unify teams around a shared vision and strategy by identifying a single, crucial metric.",
+                        "question_type": "MCQ"
+                      },
+                      {
+                        "answer": "False",
+                        "option": [
+                          "True",
+                          "False"
+                        ],
+                        "question": "The North Star Framework helps teams achieve a shared vision by focusing on multiple metrics.",
+                        "question_type": "MCQ"
+                      },
+                      {
+                        "answer": "To measure the overall success of a product or service",
+                        "option": [
+                          "To measure the individual performance of team members",
+                          "To measure the overall success of a product or service",
+                          "To track the progress of specific tasks",
+                          "To assess the efficiency of team communication"
+                        ],
+                        "question": "What is the primary goal of the North Star Metric in the North Star Framework?",
+                        "question_type": "MCQ"
+                      }
+                    ],
+                    "question_count": 5,
+                    "topic": "North Star Framework"
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "status",
+            "data"
+          ],
+          "title": "WorkflowResponseModel",
+          "description": "Data model for chat model response"
+        }
+      }
+    }
+  }
